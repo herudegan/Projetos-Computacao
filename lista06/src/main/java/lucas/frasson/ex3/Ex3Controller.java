@@ -1,16 +1,28 @@
 package lucas.frasson.ex3;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/estudantes")
 public class Ex3Controller {
+    List<Estudante> estudantes = new ArrayList<>();
 
-    @GetMapping("/{codigo}/{nome}")
-    public Estudante buscarEstudante(@PathVariable Integer codigo, @PathVariable String nome) {
+    @GetMapping
+    public List<Estudante> getAllEstudantes() {
+        return estudantes;
+    }
 
+    @GetMapping("/{codigo}")
+    public Estudante getEstudante(@PathVariable Integer codigo) {
+        return estudantes.stream().filter(estudante -> codigo.equals(estudante.getCodigo())).findFirst().orElse(null);
+    }
+
+    @PostMapping
+    public Estudante buscarEstudante(@RequestBody Estudante estudante) {
+        estudantes.add(estudante);
+        return estudante;
     }
 }
